@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coin Clicker</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/telegram-web-app/7.0.0/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #coin {
+            width: 150px;
+            height: 150px;
+            background-image: url('https://cdn-icons-png.flaticon.com/512/272/272525.png');
+            background-size: cover;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        #coin:active {
+            transform: scale(0.95);
+        }
+        #score {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="coin"></div>
+    <div id="score">Score: 0</div>
+
+    <script>
+        let score = 0;
+        const coinElement = document.getElementById('coin');
+        const scoreElement = document.getElementById('score');
+
+        coinElement.addEventListener('click', () => {
+            score++;
+            scoreElement.textContent = `Score: ${score}`;
+            
+            // Animate the coin
+            coinElement.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                coinElement.style.transform = 'scale(1)';
+            }, 100);
+
+            // If Telegram.WebApp is available, use it to show a popup
+            if (window.Telegram && window.Telegram.WebApp) {
+                Telegram.WebApp.showPopup({
+                    title: 'Coin Clicked!',
+                    message: `Your new score is ${score}`,
+                    buttons: [{text: 'OK'}]
+                });
+            }
+        });
+
+        // Initialize Telegram WebApp
+        if (window.Telegram && window.Telegram.WebApp) {
+            Telegram.WebApp.ready();
+            Telegram.WebApp.expand();
+        }
+    </script>
+</body>
+</html>
